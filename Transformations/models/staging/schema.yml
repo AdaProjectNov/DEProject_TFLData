@@ -1,0 +1,60 @@
+version: 2
+
+sources:
+  - name: staging 
+    description: Raw TFL data loaded and processed by Kestra pipeline into BigQuery.
+    database: eminent-booking-448912-q5
+    schema: de_project_2025 # BigQuery Dataset name
+    
+    tables:
+      - name: tfl_central_data
+        description: Processed TFL count data for the Central region. Contains unique IDs and correct data types.
+        columns:
+          - name: unique_row_id
+            description: Unique identifier for each reading row (TO_HEX(MD5(...))). Primary key for this source table.
+            tests:
+              - not_null
+          - name: filename
+            description: Name of the source CSV file.
+          - name: Date
+            description: The date of the reading (already parsed as DATE type). Used for partitioning.
+            tests:
+              - not_null
+          - name: Count
+            description: The count metric (already cast as INT64).
+            tests:
+              - not_null  
+
+
+      - name: tfl_inner_data
+        description: Processed TFL count data for the Inner region. Contains unique IDs and correct data types.
+        columns:
+          - name: unique_row_id
+            description: Unique identifier for each reading row (TO_HEX(MD5(...))). Primary key for this source table.
+            tests:
+              - not_null
+          - name: Date
+            description: The date of the reading (already parsed as DATE type). Used for partitioning.
+            tests:
+              - not_null
+          - name: Count
+            description: The count metric (already cast as INT64).
+            tests:
+              - not_null 
+
+
+      - name: tfl_outer_data
+        description: Processed TFL count data for the Outer region. Contains unique IDs and correct data types.
+        columns:
+          - name: unique_row_id
+            description: Unique identifier for each reading row (TO_HEX(MD5(...))). Primary key for this source table.
+            tests:
+              - not_null
+          - name: Date
+            description: The date of the reading (already parsed as DATE type). Used for partitioning.
+            tests:
+              - not_null
+          - name: Count
+            description: The count metric (already cast as INT64).
+            tests:
+              - not_null  

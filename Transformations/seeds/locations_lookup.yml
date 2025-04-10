@@ -1,0 +1,31 @@
+version: 2
+
+seeds:
+  - name: locations_lookup
+    description: Lookup table for TFL monitoring site details, loaded via dbt seed.
+    config:
+
+      column_types: 
+        site_id: string
+        location_description: string
+        borough: string
+        functional_area_for_monitoring: string
+        road_type: string
+        is_it_on_the_strategic_cio_panel: integer 
+        old_site_id_legacy: string              
+        easting_uk_grid: numeric
+        northing_uk_grid: numeric
+        latitude: numeric
+        longitude: numeric
+    columns:
+      - name: site_id
+        description: The unique identifier for the monitoring site (e.g., ML0001). Primary Key.
+        tests:
+          - unique
+          - not_null
+      - name: latitude
+        tests:
+            - not_null
+      - name: longitude
+        tests:
+            - not_null
