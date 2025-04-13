@@ -13,7 +13,8 @@ This project utilizes dbt (Data Build Tool) to extract, transform, and model Tra
 * **(Data Extraction - Implied):** Raw data (TFL counts per region) is assumed to exist in BigQuery source tables (potentially loaded by Kestra or other means).
 
 ## Project Structure
-'''
+
+```text 
 .
 ├── dbt_project.yml         # Main dbt project configuration file
 ├── packages.yml            # dbt package dependencies (e.g., dbt_utils)
