@@ -82,15 +82,15 @@ This Kestra pipeline implements the following functionalities:
     * Each trigger fires at a specific time (9 AM, 10 AM, 11 AM) on the first day of each quarter (Jan 1st, Apr 1st, Jul 1st, Oct 1st).
     * The triggers automatically calculate the year and quarter of the *previous* quarter to use as input parameters for the flow, enabling automated quarterly data imports. For example, the trigger on April 1st will process Q1 data. The trigger on January 1st will process Q4 data from the previous year.
 * **Flow Diagram**:
-* ![Kestra Flow Diagram](https://raw.githubusercontent.com/AdaProjectNov/DEProject_TFLData/main/02_Workflow/flows/Images/kestra_flow.png) 
+  ![Kestra Flow Diagram](https://raw.githubusercontent.com/AdaProjectNov/DEProject_TFLData/main/02_Workflow/flows/Images/kestra_flow.png) 
 * **Successful Execution Example - Kestra UI Gantt Chart**:
-* ![Kestra UI Gantt chart](https://raw.githubusercontent.com/AdaProjectNov/DEProject_TFLData/main/02_Workflow/flows/Images/kestra_run.png)
+  ![Kestra UI Gantt chart](https://raw.githubusercontent.com/AdaProjectNov/DEProject_TFLData/main/02_Workflow/flows/Images/kestra_run.png)
 * **Successful Execution Example - GCP_Bucket**:
-    ![Kestra UI Gantt chart](https://raw.githubusercontent.com/AdaProjectNov/DEProject_TFLData/main/02_Workflow/flows/Images/gcs_bucket.png)
+  ![Kestra UI Gantt chart](https://raw.githubusercontent.com/AdaProjectNov/DEProject_TFLData/main/02_Workflow/flows/Images/gcs_bucket.png)
 * **Successful Execution Example - BigQuery Dataset & Tables**:
-    ![Kestra UI Gantt chart](https://raw.githubusercontent.com/AdaProjectNov/DEProject_TFLData/main/02_Workflow/flows/Images/bq_dataset.png)
+  ![Kestra UI Gantt chart](https://raw.githubusercontent.com/AdaProjectNov/DEProject_TFLData/main/02_Workflow/flows/Images/bq_dataset.png)
 * **Successful Execution Example - BigQuery Table Details**:
-    ![Kestra UI Gantt chart](https://raw.githubusercontent.com/AdaProjectNov/DEProject_TFLData/main/02_Workflow/flows/Images/bq_table_details.png)
+  ![Kestra UI Gantt chart](https://raw.githubusercontent.com/AdaProjectNov/DEProject_TFLData/main/02_Workflow/flows/Images/bq_table_details.png)
 ## Setup and Execution Order
 
 1.  **Prepare GCP Service Account**: Ensure you have a GCP service account with the necessary permissions to access GCS and BigQuery (e.g., `Storage Admin`, `BigQuery Admin`, or more granular permissions). Download the JSON key file for this service account.
