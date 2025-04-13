@@ -31,7 +31,7 @@ This project utilizes dbt (Data Build Tool) to extract, transform, and model Tra
         ├── schema.yml          # Descriptions and tests for core models
         ├── dim_locations.sql   # Location dimension table
         └── fact_cyclings.sql   # Cycling count fact table
-
+```
 
 ## Models Explained
 
