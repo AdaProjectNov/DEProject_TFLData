@@ -10,7 +10,7 @@ This project utilizes dbt (Data Build Tool) to extract, transform, and model Tra
 * **Data Warehouse:** Google BigQuery
 * **Version Control:** Git / GitHub
 * **Static Data:** dbt Seeds (for location lookup table)
-* **(Data Extraction - Implied):** Raw data (TFL counts per region) is assumed to exist in BigQuery source tables (potentially loaded by Kestra or other means).
+* **(Data Extraction - Implied):** Raw data (TFL counts per region) is assumed to exist in BigQuery source tables (potentially loaded by Kestra or other means). Here we use the data loaded by Kestra.
 
 ## Project Structure
 ## Project Structure
@@ -117,12 +117,13 @@ The following diagram shows the dependencies between the dbt models:
         ```
     * Alternatively, use `dbt build`.
     * **Example Success Screenshot for `dbt test` or `dbt build`:**
-        `![dbt test Success Placeholder](path/to/your/dbt_test_success.png)`
+  
       ![dbt test Success](https://raw.githubusercontent.com/AdaProjectNov/DEProject_TFLData/main/03_Transformations/screenshots/dbt%20test%20success.png) 
 
 ## Example Data
 
 Below is a sample screenshot showing data in the final `fact_cyclings` table within BigQuery:
 
-![Example fact_cyclings Table in BigQuery](https://raw.githubusercontent.com/AdaProjectNov/DEProject_TFLData/main/03_Transformations/screenshots/fact_cyclings%20table%20part%201.png)
+![](https://raw.githubusercontent.com/AdaProjectNov/DEProject_TFLData/main/03_Transformations/screenshots/fact_cyclings%20table%20part%201.png)
+
 ![](https://raw.githubusercontent.com/AdaProjectNov/DEProject_TFLData/main/03_Transformations/screenshots/fact_cyclings%20table%20part%202.png)
