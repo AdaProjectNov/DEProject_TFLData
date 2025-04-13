@@ -87,7 +87,7 @@ This Kestra pipeline implements the following functionalities:
     * The triggers automatically calculate the year and quarter of the *previous* quarter to use as input parameters for the flow, enabling automated quarterly data imports. For example, the trigger on April 1st will process Q1 data. The trigger on January 1st will process Q4 data from the previous year.
 * **Flow Diagram**:
     ```
-    ![Kestra Flow Diagram](02_Workflow/flows/Images/kestra_flow.png) 
+    ![Kestra Flow Diagram](https://raw.githubusercontent.com/AdaProjectNov/DEProject_TFLData/blob/main/02_Workflow/flows/Images/kestra_flow.png) 
     ```
 
 * **Successful Execution Example**:
