@@ -50,7 +50,7 @@ This project utilizes the final `fact_cyclings` core data model to build a serie
 * **Type:** Bar Chart (more suitable than a line chart for comparing discrete categories).
 * **Content:** X-axis represents the type of road (`road_type`, from the `dim_locations` table), Y-axis represents the total cycling count (`SUM(reading_count)`) across all monitoring sites located on that road type.
 * **Purpose & Insights:**
-    * **Infrastructure Usage Analysis:** Understand which types of roads (e.g., A Roads, Cycleways, Local Streets - *specific types depend on your `dim_locations` data*) accommodate the most cycling traffic.
+    * **Infrastructure Usage Analysis:** Understand which types of roads (e.g., A Roads, Cycleways, Local Streets) accommodate the most cycling traffic.
     * **Assess Facility Effectiveness:** If data shows significantly higher traffic on dedicated cycleways compared to other roads under similar conditions, it can support the case for their effectiveness. Conversely, low usage on certain road types might warrant investigation.
     * **Optimization Suggestions:** Combined with map data, analyzing the distribution of high-traffic road types can inform future planning for the cycle network, connectivity improvements, and road safety enhancements. For example, should safer cycling facilities be added alongside high-traffic A roads?
 
