@@ -13,26 +13,24 @@ This project utilizes dbt (Data Build Tool) to extract, transform, and model Tra
 * **(Data Extraction - Implied):** Raw data (TFL counts per region) is assumed to exist in BigQuery source tables (potentially loaded by Kestra or other means).
 
 ## Project Structure
+'''
 .
 ├── dbt_project.yml         # Main dbt project configuration file
-
 ├── packages.yml            # dbt package dependencies (e.g., dbt_utils)
-
 ├── seeds/                  # Contains static data (CSV) and corresponding config/tests
-
 │   ├── locations_lookup.csv  # Raw data with details for TFL monitoring sites
-
 │   └── locations_lookup.yml  # Configuration, description, and tests for the seed file
 └── models/                 # Contains all data transformation logic (SQL files)
-├── staging/            # Staging layer models: basic cleaning, renaming, type casting
-│   ├── schema.yml          # Descriptions and tests for staging sources and models
-│   ├── stg_tfl_central_data.sql
-│   ├── stg_tfl_inner_data.sql
-│   └── stg_tfl_outer_data.sql
-└── core/               # Core layer models: dimension and fact tables for analysis
-├── schema.yml          # Descriptions and tests for core models
-├── dim_locations.sql   # Location dimension table
-└── fact_cyclings.sql   # Cycling count fact table
+    ├── staging/            # Staging layer models: basic cleaning, renaming, type casting
+    │   ├── schema.yml          # Descriptions and tests for staging sources and models
+    │   ├── stg_tfl_central_data.sql
+    │   ├── stg_tfl_inner_data.sql
+    │   └── stg_tfl_outer_data.sql
+    └── core/               # Core layer models: dimension and fact tables for analysis
+        ├── schema.yml          # Descriptions and tests for core models
+        ├── dim_locations.sql   # Location dimension table
+        └── fact_cyclings.sql   # Cycling count fact table
+'''
 
 ## Models Explained
 
