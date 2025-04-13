@@ -1,0 +1,123 @@
+version: 2
+
+models:
+  # Define documentation and tests for the dim_locations model
+  - name: dim_locations # Matches the filename dim_locations.sql
+    description: Dimension table containing details about TFL monitoring sites, loaded from the locations_lookup seed file.
+    columns:
+      - name: location_id # Name as defined in dim_locations.sql
+        description: The unique identifier for the monitoring site (e.g., ML0001). This is the primary key for this dimension. Derived from the seed's site_id.
+        tests:
+          - not_null # The location ID should not be null
+
+      - name: location_name
+        description: Text description of the location.
+
+      - name: borough
+        description: The London borough where the site is located.
+        # tests:
+        #   - not_null # Optional: Add if borough should always be present
+
+      - name: functional_area
+        description: Functional area designation for monitoring.
+
+      - name: road_type
+        description: Type of road where the site is located.
+
+      - name: strategic_cio_panel_id
+        description: Identifier related to the strategic CIO panel status.
+
+      - name: legacy_site_id
+        description: The older legacy site identifier, if available.
+
+      - name: easting_uk_grid
+        description: Easting coordinate based on the UK National Grid (OSGB36). Should be numeric.
+
+      - name: northing_uk_grid
+        description: Northing coordinate based on the UK National Grid (OSGB36). Should be numeric.
+
+      - name: latitude
+        description: Latitude coordinate (WGS84). Should be numeric.
+        tests:
+          - not_null # Coordinates are usually expected
+
+      - name: longitude
+        description: Longitude coordinate (WGS84). Should be numeric.
+        tests:
+          - not_null # Coordinates are usually expected
+
+  # Define documentation and tests for the fact_cyclings model
+  - name: fact_cyclings # Matches the filename fact_cyclings.sql
+    description: Fact table containing individual TFL cycling count readings, unioned across regions and enriched with location details. Partitioned by reading_date and clustered by region, location_id, mode.
+    columns:
+      - name: cycling_reading_id # Name as defined in fact_cyclings.sql
+        description: The unique identifier for each cycling reading row. This is the primary key for the fact table (derived from Kestra's unique_row_id).
+        tests:
+          - not_null
+
+      - name: location_id # Name as defined in fact_cyclings.sql
+        description: Foreign key referencing the dim_locations table's location_id.
+        tests:
+          - not_null # Foreign keys should generally not be null
+          - relationships: # Test relationship to the dimension table
+              to: ref('dim_locations') # Ensures this ID exists in dim_locations
+              field: location_id       # Specifies the field in dim_locations to check against
+
+      - name: region
+        description: The region (Central, Inner, Outer) the reading belongs to. Added during union.
+        tests:
+          - not_null
+          - accepted_values: # Ensures only expected region values are present
+              values: ['Central', 'Inner', 'Outer']
+
+      - name: filename
+        description: The name of the source CSV file for this reading.
+
+      - name: wave
+        description: TFL specific field 'Wave'.
+
+      - name: weather
+        description: Recorded weather condition at the time of reading.
+
+      - name: day
+        description: Day of the week.
+
+      - name: round
+        description: TFL specific field 'Round'.
+
+      - name: direction
+        description: Direction associated with the reading.
+
+      - name: path
+        description: Path associated with the reading.
+
+      - name: mode
+        description: Mode of transport being counted (should likely be cycling related).
+        tests:
+          - not_null
+
+      - name: reading_date
+        description: The date of the reading (DATE type). Partition key for this table.
+        tests:
+          - not_null
+
+      - name: reading_time_str
+        description: The time of the reading as a STRING (e.g., 'HH:MM:SS').
+
+      - name: location_name
+        description: Text description of the location, joined from dim_locations.
+
+      - name: borough
+        description: The London borough where the reading occurred, joined from dim_locations.
+
+      - name: road_type
+        description: The type of road where the reading occurred, joined from dim_locations.
+
+      - name: location_latitude
+        description: Latitude of the location, joined from dim_locations.
+
+      - name: location_longitude
+        description: Longitude of the location, joined from dim_locations.
+
+      - name: reading_count
+        description: The measured count for the reading (INT64 type). The main fact/measure.

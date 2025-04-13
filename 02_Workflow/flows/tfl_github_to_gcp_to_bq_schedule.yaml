@@ -1,0 +1,213 @@
+id: tfl_github_to_gcp_to_bq_schedule
+namespace: tfl
+description: |
+  Ingest TFL data from GitHub to GCS to BigQuery per region and quarter.
+
+inputs:
+  - id: year
+    type: SELECT
+    values: ["2015", "2016", "2017", "2018", "2019", "2020"]
+    defaults: "2015"
+
+  - id: quarter
+    type: SELECT
+    values: ["Q1", "Q2", "Q3", "Q4"]
+    defaults: "Q1"
+
+  - id: region
+    type: SELECT
+    values: ["Central", "Inner", "Outer"]
+    defaults: "Central"
+
+variables:
+  file: "{{inputs.year}}_{{inputs.quarter}}-{{inputs.region}}.csv"
+  gcs_file: "gs://kestra_de_project_2025/{{vars.file}}"
+  region_lower: "{{inputs.region | lower}}"
+  temp_table: "de_project_2025.tfl_temp_{{vars.region_lower}}"
+  main_table: "de_project_2025.tfl_{{vars.region_lower}}_data"
+  data:
+
+tasks:
+  - id: set_label
+    type: io.kestra.plugin.core.execution.Labels
+    labels:
+      file: "{{render(vars.file)}}"
+      region: "{{inputs.region}}"
+
+  - id: extract
+    type: io.kestra.plugin.scripts.shell.Commands
+    outputFiles:
+      - "*.csv"
+    taskRunner:
+      type: io.kestra.plugin.core.runner.Process
+    commands:
+      - wget -qO "{{render(vars.file)}}" "https://raw.githubusercontent.com/AdaProjectNov/DEProject_TFLData/refs/heads/main/Data/{{render(vars.file)}}"
+
+
+  - id: upload_to_gcs
+    type: io.kestra.plugin.gcp.gcs.Upload
+    from: "{{ outputs.extract.outputFiles.values() | first }}"
+    to: "{{render(vars.gcs_file)}}"
+    serviceAccount: "{{ kv('GCP_CREDS') }}"
+
+
+
+  - id: create_external_table
+    type: io.kestra.plugin.gcp.bigquery.Query
+    sql: |
+      CREATE OR REPLACE EXTERNAL TABLE {{ kv('GCP_PROJECT_ID') }}.{{ render(vars.temp_table)}}_ext (
+        Wave STRING,
+        SiteID STRING,
+        Date STRING,
+        Weather STRING,
+        Time STRING,
+        Day STRING,
+        Round STRING,
+        Direction STRING,
+        Path STRING,
+        Mode STRING,
+        Count INT64
+      )
+      OPTIONS (
+        format = 'CSV',
+        uris = ['{{render(vars.gcs_file)}}'],
+        skip_leading_rows = 1,
+        ignore_unknown_values = TRUE
+      );
+
+  - id: create_temp_table
+    type: io.kestra.plugin.gcp.bigquery.Query
+    sql: |
+      CREATE OR REPLACE TABLE {{ kv('GCP_PROJECT_ID') }}.{{ render(vars.temp_table) }} AS
+      SELECT
+        TO_HEX(MD5(CONCAT(
+          COALESCE(ext.Date, ''),    
+          COALESCE(ext.SiteID, ''), 
+          COALESCE(ext.Time, ''), 
+          COALESCE(ext.Path, ''), 
+          COALESCE(ext.Direction, ''), 
+          COALESCE(ext.Round, '')
+        ))) AS unique_row_id,
+        "{{render(vars.file)}}" AS filename,
+        ext.Wave,
+        ext.SiteID,
+        PARSE_DATE('%d/%m/%Y', ext.Date) AS Date, 
+        ext.Weather,
+        ext.Time,
+        ext.Day,
+        ext.Round,
+        ext.Direction,
+        ext.Path,
+        ext.Mode,
+        ext.Count
+      FROM {{ kv('GCP_PROJECT_ID') }}.{{ render(vars.temp_table) }}_ext AS ext; 
+
+  - id: create_main_table_if_not_exist
+    type: io.kestra.plugin.gcp.bigquery.Query
+    sql: |
+      CREATE TABLE IF NOT EXISTS {{ kv('GCP_PROJECT_ID') }}.{{ render(vars.main_table) }} (
+        unique_row_id STRING,
+        filename STRING,
+        Wave STRING,
+        SiteID STRING,
+        Date DATE,          
+        Weather STRING,
+        Time STRING,
+        Day STRING,
+        Round STRING,
+        Direction STRING,
+        Path STRING,
+        Mode STRING,
+        Count INT64
+      )
+      PARTITION BY Date    
+      CLUSTER BY SiteID, Mode;
+
+  - id: merge_data
+    type: io.kestra.plugin.gcp.bigquery.Query
+    sql: |
+      MERGE INTO {{ kv('GCP_PROJECT_ID') }}.{{ render(vars.main_table) }} T
+      USING {{ kv('GCP_PROJECT_ID') }}.{{ render(vars.temp_table) }} S
+      ON T.unique_row_id = S.unique_row_id
+      WHEN NOT MATCHED THEN
+        INSERT (
+          unique_row_id, filename, Wave, SiteID, Date, Weather, Time, Day, Round, Direction, Path, Mode, Count
+        )
+        VALUES (
+          S.unique_row_id, S.filename, S.Wave, S.SiteID, S.Date, S.Weather, S.Time, S.Day, S.Round, S.Direction, S.Path, S.Mode, S.Count
+        );
+
+
+  - id: purge_temp
+    type: io.kestra.plugin.core.storage.PurgeCurrentExecutionFiles
+
+pluginDefaults:
+  - type: io.kestra.plugin.gcp
+    values:
+      serviceAccount: "{{kv('GCP_CREDS')}}"
+      projectId: "{{kv('GCP_PROJECT_ID')}}"
+      location: "{{kv('GCP_LOCATION')}}"
+      bucket: "{{kv('GCP_BUCKET_NAME')}}"
+      
+triggers:
+  - id: central_quarterly_trigger
+    type: io.kestra.plugin.core.trigger.Schedule
+    cron: "0 9 1 1,4,7,10 *"
+    inputs:
+      region: Central
+      year: |
+        {% set triggerMonth = trigger.date | date('M') %}
+        {% if triggerMonth == 1 %}
+        {{ (trigger.date | date('yyyy')) - 1 }}
+        {% else %}
+        {{ trigger.date | date('yyyy') }}
+        {% endif %}
+      quarter: |
+        {% set triggerMonth = trigger.date | date('M') %}
+        {% if triggerMonth == 1 %}Q4
+        {% elif triggerMonth == 4 %}Q1
+        {% elif triggerMonth == 7 %}Q2
+        {% else %}Q3
+        {% endif %}
+
+  - id: inner_quarterly_trigger 
+    type: io.kestra.plugin.core.trigger.Schedule
+    cron: "0 10 1 1,4,7,10 *"
+    inputs:
+      region: Inner 
+      year: |
+        {% set triggerMonth = trigger.date | date('M') %}
+        {% if triggerMonth == 1 %}
+        {{ (trigger.date | date('yyyy')) - 1 }}
+        {% else %}
+        {{ trigger.date | date('yyyy') }}
+        {% endif %}
+      quarter: |
+        {% set triggerMonth = trigger.date | date('M') %}
+        {% if triggerMonth == 1 %}Q4
+        {% elif triggerMonth == 4 %}Q1
+        {% elif triggerMonth == 7 %}Q2
+        {% else %}Q3
+        {% endif %}
+
+  - id: outer_quarterly_trigger
+    type: io.kestra.plugin.core.trigger.Schedule
+    cron: "0 11 1 1,4,7,10 *"
+    inputs:
+      region: Outer
+      year: |
+        {% set triggerMonth = trigger.date | date('M') %}
+        {% if triggerMonth == 1 %}
+        {{ (trigger.date | date('yyyy')) - 1 }}
+        {% else %}
+        {{ trigger.date | date('yyyy') }}
+        {% endif %}
+      quarter: |
+        {% set triggerMonth = trigger.date | date('M') %}
+        {% if triggerMonth == 1 %}Q4
+        {% elif triggerMonth == 4 %}Q1
+        {% elif triggerMonth == 7 %}Q2
+        {% else %}Q3
+        {% endif %}
+
+

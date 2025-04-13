@@ -1,0 +1,46 @@
+id: de_project_gcp_kv
+namespace: tfl
+tasks:
+  - id: gcp_creds
+    type: io.kestra.plugin.core.kv.Set
+    key: GCP_CREDS
+    kvType: JSON
+    value: |
+      {
+        "type": "service_account",
+        "project_id": "eminent-booking-448912-q5",
+        "private_key_id": "# PASTE YOUR GCP SERVICE ACCOUNT JSON HERE - It's not allowed to COMMIT TO GIT!",
+        "private_key": "# PASTE YOUR GCP SERVICE ACCOUNT JSON HERE - It's not allowed to COMMIT TO GIT!",
+        "client_email": "zoomcamp@eminent-booking-448912-q5.iam.gserviceaccount.com",
+        "client_id": "109308193172764008316",
+        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+        "token_uri": "https://oauth2.googleapis.com/token",
+        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+        "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/zoomcamp%40eminent-booking-448912-q5.iam.gserviceaccount.com",
+        "universe_domain": "googleapis.com"
+        }
+
+
+  - id: gcp_project_id
+    type: io.kestra.plugin.core.kv.Set
+    key: GCP_PROJECT_ID
+    kvType: STRING
+    value: eminent-booking-448912-q5 # TODO replace with your project id
+
+  - id: gcp_location
+    type: io.kestra.plugin.core.kv.Set
+    key: GCP_LOCATION
+    kvType: STRING
+    value: europe-west2
+
+  - id: gcp_bucket_name
+    type: io.kestra.plugin.core.kv.Set
+    key: GCP_BUCKET_NAME
+    kvType: STRING
+    value: kestra_de_project_2025 # TODO make sure it's globally unique!
+
+  - id: gcp_dataset
+    type: io.kestra.plugin.core.kv.Set
+    key: GCP_DATASET
+    kvType: STRING
+    value: de_project_2025
