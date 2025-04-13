@@ -70,8 +70,7 @@ This project follows a layered modeling approach:
 
 The following diagram shows the dependencies between the dbt models:
 
-`![dbt Model Lineage Placeholder](path/to/your/lineage_screenshot.png)`
-*(You need to replace this with the path to your dbt lineage graph screenshot. You can view this in the dbt Cloud IDE documentation or after running `dbt docs generate` locally.)*
+ ![dbt Model Lineage](https://raw.githubusercontent.com/AdaProjectNov/DEProject_TFLData/main/03_Transformations/screenshots/Data%20Lineage.png) 
 
 ## How to Run
 
@@ -108,8 +107,8 @@ The following diagram shows the dependencies between the dbt models:
         dbt build
         ```
     * **Example Success Screenshot for `dbt run` or `dbt build`:**
-        `![dbt run/build Success Placeholder](path/to/your/dbt_run_success.png)`
-        *(You need to replace this with the path to a screenshot of your terminal or dbt Cloud interface showing a successful run)*
+
+      ![dbt run/build Success](https://raw.githubusercontent.com/AdaProjectNov/DEProject_TFLData/main/03_Transformations/screenshots/dbt%20run%20success.png) 
 
 3.  **Run Tests:**
     * Run all data quality tests defined in your `schema.yml` files:
@@ -119,11 +118,11 @@ The following diagram shows the dependencies between the dbt models:
     * Alternatively, use `dbt build`.
     * **Example Success Screenshot for `dbt test` or `dbt build`:**
         `![dbt test Success Placeholder](path/to/your/dbt_test_success.png)`
-        *(You need to replace this with the path to a screenshot showing a successful test run)*
+      ![dbt test Success](https://raw.githubusercontent.com/AdaProjectNov/DEProject_TFLData/main/03_Transformations/screenshots/dbt%20test%20success.png) 
 
 ## Example Data
 
 Below is a sample screenshot showing data in the final `fact_cyclings` table within BigQuery:
 
-`![Example fact_cyclings Table in BigQuery Placeholder](path/to/your/fact_table_screenshot.png)`
-*(You need to replace this with the path to a screenshot of the `fact_cyclings` table queried in the BigQuery UI)*
+![Example fact_cyclings Table in BigQuery](https://raw.githubusercontent.com/AdaProjectNov/DEProject_TFLData/main/03_Transformations/screenshots/fact_cyclings%20table%20part%201.png)
+![](https://raw.githubusercontent.com/AdaProjectNov/DEProject_TFLData/main/03_Transformations/screenshots/fact_cyclings%20table%20part%202.png)
