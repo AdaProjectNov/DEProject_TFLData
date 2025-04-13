@@ -85,12 +85,16 @@ This Kestra pipeline implements the following functionalities:
 
   ![Kestra Flow Diagram](https://raw.githubusercontent.com/AdaProjectNov/DEProject_TFLData/main/02_Workflow/flows/Images/kestra_flow.png) 
 * **Successful Execution Example - Kestra UI Gantt Chart**:
+  
   ![Kestra UI Gantt chart](https://raw.githubusercontent.com/AdaProjectNov/DEProject_TFLData/main/02_Workflow/flows/Images/kestra_run.png)
 * **Successful Execution Example - GCP_Bucket**:
+  
   ![Kestra UI Gantt chart](https://raw.githubusercontent.com/AdaProjectNov/DEProject_TFLData/main/02_Workflow/flows/Images/gcs_bucket.png)
 * **Successful Execution Example - BigQuery Dataset & Tables**:
+  
   ![Kestra UI Gantt chart](https://raw.githubusercontent.com/AdaProjectNov/DEProject_TFLData/main/02_Workflow/flows/Images/bq_dataset.png)
 * **Successful Execution Example - BigQuery Table Details**:
+  
   ![Kestra UI Gantt chart](https://raw.githubusercontent.com/AdaProjectNov/DEProject_TFLData/main/02_Workflow/flows/Images/bq_table_details.png)
 ## Setup and Execution Order
 
