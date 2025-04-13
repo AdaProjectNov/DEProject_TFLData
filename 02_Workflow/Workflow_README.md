@@ -85,11 +85,10 @@ This Kestra pipeline implements the following functionalities:
     * Includes three `Schedule` type triggers (`central_quarterly_trigger`, `inner_quarterly_trigger`, `outer_quarterly_trigger`).
     * Each trigger fires at a specific time (9 AM, 10 AM, 11 AM) on the first day of each quarter (Jan 1st, Apr 1st, Jul 1st, Oct 1st).
     * The triggers automatically calculate the year and quarter of the *previous* quarter to use as input parameters for the flow, enabling automated quarterly data imports. For example, the trigger on April 1st will process Q1 data. The trigger on January 1st will process Q4 data from the previous year.
-* **Flow Diagram (Placeholder)**:
-    ```
-    [Insert Kestra UI topology view screenshot for tfl_github_to_gcp_to_bq_schedule Flow here]
-    ```
-* **Successful Execution Example (Placeholder)**:
+* **Flow Diagram**:
+![Main ETL Flow Diagram](Images/kestra_flow.png)
+
+* **Successful Execution Example**:
     ```
     [Insert Kestra UI Gantt chart or log screenshot for successful tfl_github_to_gcp_to_bq_schedule Flow execution here]
     ```
@@ -116,5 +115,4 @@ This Kestra pipeline implements the following functionalities:
 * **GCP Credential Security**: The `de_project_gcp_kv` flow stores your GCP credentials in Kestra's KV Store. Ensure your Kestra instance is secured appropriately.
 * **GCS Bucket Uniqueness**: GCS bucket names must be globally unique. If the name you set in `de_project_gcp_kv` is already taken, the `gcp_setup` flow might fail (or skip creation if `ifExists: SKIP` is effective).
 * **Idempotency**: The `MERGE` operation in the main ETL flow ensures data loading is idempotent. Rerunning the flow for the same data period will not result in duplicate records.
-* **Error Handling**: These flows currently lack explicit error handling steps (e.g., notifications or retries if `wget` fails or a BigQuery query errors out). For production environments, consider adding error handling logic.
 * **Resource Costs**: Running BigQuery queries and storing data in GCP incurs costs. Monitor your GCP billing and usage.
