@@ -86,7 +86,9 @@ This Kestra pipeline implements the following functionalities:
     * Each trigger fires at a specific time (9 AM, 10 AM, 11 AM) on the first day of each quarter (Jan 1st, Apr 1st, Jul 1st, Oct 1st).
     * The triggers automatically calculate the year and quarter of the *previous* quarter to use as input parameters for the flow, enabling automated quarterly data imports. For example, the trigger on April 1st will process Q1 data. The trigger on January 1st will process Q4 data from the previous year.
 * **Flow Diagram**:
-![Main ETL Flow Diagram](Images/kestra_flow.png)
+    ```
+    ![Kestra Flow Diagram](02_Workflow/flows/Images/kestra_flow.png) 
+    ```
 
 * **Successful Execution Example**:
     ```
