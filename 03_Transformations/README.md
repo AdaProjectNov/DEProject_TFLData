@@ -15,9 +15,13 @@ This project utilizes dbt (Data Build Tool) to extract, transform, and model Tra
 ## Project Structure
 .
 ├── dbt_project.yml         # Main dbt project configuration file
+
 ├── packages.yml            # dbt package dependencies (e.g., dbt_utils)
+
 ├── seeds/                  # Contains static data (CSV) and corresponding config/tests
+
 │   ├── locations_lookup.csv  # Raw data with details for TFL monitoring sites
+
 │   └── locations_lookup.yml  # Configuration, description, and tests for the seed file
 └── models/                 # Contains all data transformation logic (SQL files)
 ├── staging/            # Staging layer models: basic cleaning, renaming, type casting
