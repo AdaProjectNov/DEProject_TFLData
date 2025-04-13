@@ -33,7 +33,7 @@ This project utilizes the final `fact_cyclings` core data model to build a serie
 
 ### 3. Annual Cycling Count Trend by Region (Bar Chart)
 
-* **Type:** Bar Chart (likely clustered or stacked).
+* **Type:** Bar Chart.
 * **Content:** X-axis represents the year (extracted from `reading_date`), Y-axis represents the total cycling count (`SUM(reading_count)`), and the legend or colors differentiate the regions (`region`: Central, Inner, Outer).
 * **Purpose & Insights:**
     * **Cross-Region Annual Comparison:** Allows easy comparison of total annual cycling volumes across the three regions, identifying the primary cycling areas each year.
@@ -45,14 +45,13 @@ This project utilizes the final `fact_cyclings` core data model to build a serie
 
 ---
 
-### 4. Cycling Count by Road Type (Bar Chart)
+### 4. Cycling Count by Road Type (Line Chart)
 
-* **Type:** Bar Chart (more suitable than a line chart for comparing discrete categories).
+* **Type:** Line Chart.
 * **Content:** X-axis represents the type of road (`road_type`, from the `dim_locations` table), Y-axis represents the total cycling count (`SUM(reading_count)`) across all monitoring sites located on that road type.
 * **Purpose & Insights:**
     * **Infrastructure Usage Analysis:** Understand which types of roads (e.g., A Roads, Cycleways, Local Streets) accommodate the most cycling traffic.
     * **Assess Facility Effectiveness:** If data shows significantly higher traffic on dedicated cycleways compared to other roads under similar conditions, it can support the case for their effectiveness. Conversely, low usage on certain road types might warrant investigation.
-    * **Optimization Suggestions:** Combined with map data, analyzing the distribution of high-traffic road types can inform future planning for the cycle network, connectivity improvements, and road safety enhancements. For example, should safer cycling facilities be added alongside high-traffic A roads?
 
 ![Count by Road Type Bar Chart Placeholder](https://raw.githubusercontent.com/AdaProjectNov/DEProject_TFLData/main/04_Visualization/CountofRoadType.png)
 
